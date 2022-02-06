@@ -1,3 +1,4 @@
+from base64 import encode
 import numpy as np
 import pandas as pd
 # Gensim
@@ -147,9 +148,10 @@ def prepare_data(text):
 
 def tmodel(text, topic_num):
     # загрузка данных из файла
-    # with open('text.txt', encoding="utf-8") as fp:
-    #     data = fp.read()
-    # text = data
+    
+    if len(text)<1:
+        with open('text.txt', encoding="utf-8") as fp:
+            text = fp.read()
     # print(text)
     texts, id2word, corpus, data_lemmatized = prepare_data(text)
     
@@ -170,11 +172,12 @@ def tmodel(text, topic_num):
     # Visualize the topics
     # pyLDAvis.enable_notebook()
     vis = pyLDAvis.gensim.prepare(lda_model, corpus, id2word)
-    pyLDAvis.save_html(vis, "vis.html")
-    pyLDAvis.save_json(vis, "vis.json")
-
-    import webbrowser
-    webbrowser.open_new("vis.html")
+    pyLDAvis.save_html(vis, "static/vis.html")
+    pyLDAvis.save_json(vis, "static/vis.json")
+    # ls=pyLDAvis.utils.NumPyEncoder(skipkeys=False, ensure_ascii=False, check_circular=True, allow_nan=True, sort_keys=False, indent=None, separators=None,  default=None) #encoding='UTF-8',
+    # print(ls)
+    # import webbrowser
+    # webbrowser.open_new("vis.html")
 
     # Построим тематическую модель
     # num_topics = 6 #количество тем
@@ -197,7 +200,6 @@ def tmodel(text, topic_num):
 
 
 if __name__ == '__main__':
-    text = "a measure of how good the model is. lower the better"
     tmodel(text="", topic_num=5)
 
 
